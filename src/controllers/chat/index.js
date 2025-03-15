@@ -10,14 +10,14 @@ export const getChatList = async (req, res) => {
         });
         let chatList = await Promise.all(
             Listchat.map(async c => {
-
-
                 if (c.type == "direct") {
 
                     let friendid = c.participants.filter(f => f != user._id)[0];
                     let mate = await users.findOne({ _id: friendid }, { pic: 1, fullName: 1, userName: 1 })
                     let LastMessage4 = await messages.find({ chat_id: c._id }).sort({ sendAt: -1 }).limit(1)
-                    return { chat_id: c._id, mate, LastMessage: LastMessage4[0], type: c.type }
+                    let CountUnreadMessages = await messages.countDocuments({ chat_id: c._id, senderId: { $ne: user._id }, readBy: { $nin: [user._id] } }).sort({ sendAt: -1 }).limit(1)
+
+                    return { chat_id: c._id, CountUnreadMessages, mate, LastMessage: LastMessage4[0], type: c.type }
 
                 }
             })
@@ -80,13 +80,12 @@ export const AddChatMessage = async (req, res, next) => {
     try {
 
         const { user, content, type, chat_id, _id, recievedBy, readBy } = req.body
-        const { isSent } = req.body || true
-        console.log(content);
-        
+        const { isSent } = req.body || true;
+
         let dbRes = await messages.create({
             _id,
             senderId: user._id,
-            content, 
+            content,
             recievedBy,
             type,
             isSent,

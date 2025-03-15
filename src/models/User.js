@@ -16,7 +16,7 @@ const UserShema = new mng.Schema(
         pic: {
             type: String,
             required: false,
-            default:"https://i.pinimg.com/236x/57/00/c0/5700c04197ee9a4372a35ef16eb78f4e.jpg"
+            default: "https://i.pinimg.com/236x/57/00/c0/5700c04197ee9a4372a35ef16eb78f4e.jpg"
         },
         email: {
             type: String,
@@ -36,6 +36,10 @@ const UserShema = new mng.Schema(
         timestamps: true
     }
 )
+
+
+UserShema.indexes({ fullName: 1, userName: 1 })
+
 
 UserShema.pre("save", async function (next) {
     try {

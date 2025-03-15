@@ -2,7 +2,7 @@ import { log } from "console";
 import jwt from "jsonwebtoken";
 
 const VerifyToken = (req, res, next) => {
-    try {
+    try {   
         const authz = req.headers.authorization;
         const token = authz.split(' ')[1] || null;
         if (!token) return res.status(419).send(" no token founded on request ")

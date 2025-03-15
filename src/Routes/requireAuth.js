@@ -3,7 +3,7 @@ import VerifyToken from '../config/middlwares/VerifyToken.js';
 import { ChangeProfilePic, updateFullName, updateUserStatus } from '../controllers/user/index.js';
 import multerUpload from '../multerUpload.js';
 import { getChatList, GetChatMessages, GetSuggestionMates, AddChatMessage } from '../controllers/chat/index.js';
-import { fetchReq, NewMateReq, AcceptMate } from '../controllers/user/mate.js';
+import { fetchReq, NewMateReq, AcceptMate, searchMates } from '../controllers/user/mate.js';
 // ----------------------
 
 
@@ -26,15 +26,16 @@ Router.get("/user/get", VerifyToken, (req, res) => {
 })
 
 // ------------------ 
-Router.get('/meetMates/suggestions', VerifyToken, GetSuggestionMates)
-Router.post('/meetMates/new', VerifyToken, NewMateReq)
-Router.get('/meetMates/fetchReq', VerifyToken, fetchReq)
+Router.get('/meetMates/suggestions', VerifyToken, GetSuggestionMates);
+Router.post('/meetMates/new', VerifyToken, NewMateReq);
+Router.get('/meetMates/fetchReq', VerifyToken, fetchReq);
 Router.post('/meetMates/accept', VerifyToken, AcceptMate);
+Router.get('/meetMates/search',  searchMates);
 
 // ---------
-Router.post("/chat/GetChatMessages", VerifyToken, GetChatMessages)
-Router.post("/chat/addMessage", VerifyToken, AddChatMessage)
 
+Router.post("/chat/GetChatMessages", VerifyToken, GetChatMessages);
+Router.post("/chat/addMessage", VerifyToken, AddChatMessage);
 
 // ---------------
 Router.post('/logout', VerifyToken, (req, res) => {

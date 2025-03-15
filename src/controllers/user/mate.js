@@ -1,5 +1,6 @@
 import chats from "../../models/Chat.js";
 import MateReqs from "../../models/MateReq.js";
+import User from "../../models/User.js";
 
 export const NewMateReq = async (req, res) => {
     try {
@@ -58,6 +59,23 @@ export const AcceptMate = async (req, res) => {
             }
         )
         return res.status(200).json({ chat_id: dbRes._id })
+    } catch (err) {
+        return res.status(500).send('failed => ' + err)
+    }
+};
+
+export const searchMates = async (req, res, next) => {
+    try {
+        const { user } = req.body
+        const { serachWord } = req.query;
+        const rege = new RegExp(serachWord, "i")
+        const dbRes = await User.find({
+            $or: [
+                { fullName: { $regex: rege } },
+                { userName: serachWord }
+            ]
+        }, { fullName: 1, userName: 1, pic: 1, status: 1, createdAt: 1 });
+        return res.status(200).json(dbRes);
     } catch (err) {
         return res.status(500).send('failed => ' + err)
     }

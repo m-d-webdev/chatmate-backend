@@ -1,4 +1,4 @@
-import Ai_Response from '../../config/openai.js'
+import Ai_Response from '../../openai.js'
 
 
 

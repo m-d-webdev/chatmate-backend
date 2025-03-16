@@ -6,6 +6,7 @@ const TableSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
+    
     to: {
         type: mongoose.Schema.Types.ObjectId,
         required: true

@@ -3,7 +3,7 @@ import VerifyToken from '../config/middlwares/VerifyToken.js';
 import { ChangeProfilePic, updateFullName, updateUserStatus } from '../controllers/user/index.js';
 import multerUpload from '../multerUpload.js';
 import { getChatList, GetChatMessages, GetSuggestionMates, AddChatMessage } from '../controllers/chat/index.js';
-import { fetchReq, NewMateReq, AcceptMate, searchMates } from '../controllers/user/mate.js';
+import { fetchReq, NewMateReq, AcceptMate, searchMates ,DeleteMateReq } from '../controllers/user/mate.js';
 // ----------------------
 
 
@@ -28,8 +28,10 @@ Router.get("/user/get", VerifyToken, (req, res) => {
 // ------------------ 
 Router.get('/meetMates/suggestions', VerifyToken, GetSuggestionMates);
 Router.post('/meetMates/new', VerifyToken, NewMateReq);
+Router.post('/meetMates/deleteReq', VerifyToken, DeleteMateReq);
 Router.get('/meetMates/fetchReq', VerifyToken, fetchReq);
 Router.post('/meetMates/accept', VerifyToken, AcceptMate);
+Router.get('/meetMates/search',  searchMates);
 Router.get('/meetMates/search',  searchMates);
 
 // ---------

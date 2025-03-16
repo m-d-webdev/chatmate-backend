@@ -16,6 +16,15 @@ export const NewMateReq = async (req, res) => {
         return res.status(500).send('failed => ' + err)
     }
 };
+export const DeleteMateReq = async (req, res) => {
+    try {
+        const { req_id, user } = req.body
+        let dbRes = await MateReqs.deleteOne({ _id: req_id });
+        return res.status(200).json(dbRes)
+    } catch (err) {
+        return res.status(500).send('failed => ' + err)
+    }
+};
 
 export const fetchReq = async (req, res) => {
     try {
@@ -32,6 +41,14 @@ export const fetchReq = async (req, res) => {
                 }
             ]
         });
+        dbRes = await Promise.all(
+            dbRes.map(async m => {
+
+                let friendId = m.senderId == user._id ? m.to : m.senderId;
+                const mateData = await User.findOne({ _id: friendId }, { fullName: 1, pic: 1, userName: 1 })
+                return { ...m._doc, mate: mateData }
+            })
+        )
 
         return res.status(200).json({ matesReq: dbRes })
     } catch (err) {

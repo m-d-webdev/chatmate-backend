@@ -16,7 +16,7 @@ export default function startSocket(io) {
             Promise.all(
                 ClientsFriendsIds.map(async (f) => {
                     if (Clients.get(f)) {
-                        
+
                         socket.to(Clients.get(f).id).emit("friendConnected", socket.handshake.query.clientId)
                         socket.emit("friendConnected", f)
                     }
@@ -71,7 +71,7 @@ export default function startSocket(io) {
         socket.on('data-chunk', (chunk, cb) => {
             try {
                 if (Clients.get(chunk.SocketTO)) {
-                    
+
                     socket.to(Clients.get(chunk.SocketTO).id).emit("data-chunk", chunk, () => {
                         cb({ ok: true });
                     })
@@ -94,6 +94,19 @@ export default function startSocket(io) {
                 }
             } catch (error) { }
         })
+        socket.on("friendAcceptReq", m => {
+            try {
+                if (Clients.get(m.SocketTO)) {
+
+                    socket.to(Clients.get(m.SocketTO).id).emit("friendAcceptReq", { data: m.data }, () => {
+                        socket.to(Clients.get(m.SocketTO).id).emit("friendConnected", socket.handshake.query.clientId)
+                        socket.emit("friendConnected", m.SocketTO)
+                    });
+                }
+            } catch (error) { }
+
+        })
+
 
         // --------------  ---------
         socket.on("disconnect", () => {

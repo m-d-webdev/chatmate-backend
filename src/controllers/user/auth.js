@@ -27,7 +27,7 @@ export const loginUser = async (req, res) => {
         const token = jwt.sign({ user }, process.env.JWTCODE);
         if (token) {
 
-            log("token generated => ", token)
+            console.log("token generated => ", token)
             return res.status(200).json({ token })
         } else {
 

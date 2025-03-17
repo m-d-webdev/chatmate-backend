@@ -24,11 +24,16 @@ export const loginUser = async (req, res) => {
         if (!isCorrect) return res.status(401).send("pass");
 
         delete user._doc['password'];
-        const token = jwt.sign({ user }, process.env.JWTCODE)
-        return res.status(200).json({ token })
+        const token = jwt.sign({ user }, process.env.JWTCODE);
+        if (token) {
+            return res.status(200).json({ token })
+        } else {
+
+            return res.status(500).send("Falied to generate toeken ")
+        }
 
     } catch (error) {
-        return res.status(401).send("Failed to auth user")
+        return res.status(500).send("Failed to auth user")
     }
 }
 

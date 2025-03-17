@@ -27,9 +27,9 @@ export const loginUser = async (req, res) => {
         const token = jwt.sign({ user }, process.env.JWTCODE);
         if (token) {
 
-            console.log("token generated => ", token)
             return res.status(200).json({ token })
-        } else {
+            
+        } else {    
 
             return res.status(500).send("Falied to generate toeken ")
         }

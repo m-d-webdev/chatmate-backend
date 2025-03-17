@@ -26,6 +26,8 @@ export const loginUser = async (req, res) => {
         delete user._doc['password'];
         const token = jwt.sign({ user }, process.env.JWTCODE);
         if (token) {
+
+            log("token generated => ", token)
             return res.status(200).json({ token })
         } else {
 
@@ -33,7 +35,7 @@ export const loginUser = async (req, res) => {
         }
 
     } catch (error) {
-        return res.status(500).send("Failed to auth user")
+        return res.status(500).send("Failed to auth user => ", error)
     }
 }
 

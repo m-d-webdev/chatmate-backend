@@ -8,7 +8,7 @@ import startSocket from "./config/socket.js"
 ConnectToDb();
 const server = new Http.createServer(app);
 const io = new Server(server, {
-    cors: "*"
+    cors: [process.env.FRONTEND_URL, "http://localhost:3000"]
 });
 startSocket(io)
 server.listen(process.env.PORT, () => {

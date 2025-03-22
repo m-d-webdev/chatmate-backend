@@ -28,8 +28,8 @@ export const loginUser = async (req, res) => {
         if (token) {
 
             return res.status(200).json({ token })
-            
-        } else {    
+
+        } else {
 
             return res.status(500).send("Falied to generate toeken ")
         }
@@ -96,5 +96,43 @@ export const authenticateUser = async (req, res) => {
     } catch (error) {
         log(error)
         return res.status(500).send("Falied to authUser => " + error)
+    }
+}
+
+// -----------------
+
+
+export const LoginUserFromPopup = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await users.findOne({ email }, { fullName: 1, userName: 1, pic: 1, status: 1 })
+        if (!user) return res.status(404).json({ error_code: "email_not_found" })
+        const token = jwt.sign({ user }, process.env.JWTCODE);
+        if (token) {
+
+            return res.status(200).json({ token });
+
+        } else {    
+
+            return res.status(500).send("Falied to generate toeken ")
+        }
+
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).send("failed => " + error);
+    }
+}
+export const NewUserFromPopup = async (req, res) => {
+    try {
+
+        const { fullName, email, pic, userName } = req.body;
+        const isExists = await users.findOne({ email });
+        if (isExists) return res.status(400).send({ error_code: "email_already_exists" })
+        const _newUser = await users.create({ fullName, email, pic, userName });
+        let token = jwt.sign({ user: _newUser }, process.env.JWTCODE)
+        return res.status(200).json({ token });
+    } catch (error) {
+        return res.status(500).send("failed to registed this user")
     }
 }
